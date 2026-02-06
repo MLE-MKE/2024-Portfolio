@@ -24,6 +24,8 @@
        }
    });
 
+   ///I need a random comment so I can commit something 
+
    // Function to handle mouse down event (start dragging)
    modalContent.addEventListener('mousedown', function (e) {
        isDragging = true;
