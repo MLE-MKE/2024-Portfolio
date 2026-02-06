@@ -37,6 +37,60 @@
             object-fit: cover; /* Cover the entire screen */
             z-index: -1; /* Send to the back */
         }
+
+        /* Modal Styling */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Modal Content Box */
+        .modal-content {
+            background-color: rgb(255, 106, 205);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%; /* Adjust width to 90% on smaller screens */
+            max-width: 400px; /* Limit the maximum width */
+            position: relative;
+            overflow-y: auto; /* Allow scrolling if the content overflows */
+            cursor: move; /* Indicate that the modal is draggable */
+        }
+
+        /* Close Button */
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Modal Download Buttons */
+        .modal-button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #770063;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Ensure buttons fill the modal width */
+        }
+
+        .modal-button:hover {
+            background-color: #1e0072;
+        }
+
     </style>
 </head>
 <body>
@@ -55,10 +109,7 @@
                     <span class="discount-text">* KQ10 for 10% off *</span>
                 </span>
             </a>
-            <a href="https://www.twitch.tv/killer_queen55" class="button">
-                <img src="Images/Twitch logo.png" alt="Twitch">
-                Twitch
-            </a>
+        
             <a href="https://www.tiktok.com/@killer_queen5555" class="button">
                 <img src="Images/TikTok Logo.png" alt="TikTok">
                 TikTok
@@ -67,10 +118,31 @@
                 <img src="Images/Youtube logo.png" alt="YouTube">
                 YouTube
             </a>
-            <a href="https://www.passes.com/killer_queen55" class="button">
-                <img src="Images/passes logo.png" alt="Passes">
-                Passes
-            </a>
+
+            <!--Valentines/ Download Section-->
+            <!-- Main Download Button -->
+<button id="openModalButton" class="button">
+    <img src="Images/KQ Brand Logo (1).png" alt="design brand logo">
+    <span class="button-text">Free Valentines PDF</span>
+</button>
+
+<!-- Modal (Hidden by Default) -->
+<div id="pdfModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Free Valentines Download</h2>
+        <a href="Files/I choose You valentine.pdf" download="I choose You valentine.pdf" class="modal-button">Pokemon</a>
+        <a href="Files/Make Me Moist Valentines.pdf" download="Make Me Moist Valentines.pdf" class="modal-button">Cake</a>
+        <a href="Files/Web Dev Valentines.pdf" download="Web Dev Valentines.pdf" class="modal-button">Web Dev</a>
+    </div>
+</div>
+
+<a href="https://www.twitch.tv/killer_queen55" class="button">
+    <img src="Images/Twitch logo.png" alt="Twitch">
+    Twitch
+</a>
+
+      
             <a href="https://www.instagram.com/killer__queen55/" class="button">
                 <img src="Images/Instagram logo.png" alt="Instagram">
                 Instagram
@@ -79,6 +151,13 @@
                 <img src="Images/X logo.png" alt="Twitter">
                 X (aka Twitter)
             </a>
+
+<!-- pases is hidden because I want a job and to not be judged for expressing myself with my body heaven forbid
+            <a href="https://www.passes.com/killer_queen55" class="button">
+                <img src="Images/passes logo.png" alt="Passes">
+                Passes
+            </a> 
+-->
             <!-- Disappearing Button -->
             <a href="#" class="button running-button disappearing-button">
                 <img src="Images/github logo.png" alt="running-button">
@@ -86,13 +165,37 @@
             </a>
         </div>
     </div>
-
-    <!-- Footer -->
+     <!-- Footer -->
     <footer>
         <p>Website created by me ^.^ Killer_Queen55</p>
     </footer>
 
     <script>
+        // Draggable modal functionality
+        const modalContent = document.querySelector(".modal-content");
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        modalContent.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            offsetX = e.clientX - modalContent.getBoundingClientRect().left;
+            offsetY = e.clientY - modalContent.getBoundingClientRect().top;
+            modalContent.style.cursor = "move";
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (isDragging) {
+                modalContent.style.left = `${e.clientX - offsetX}px`;
+                modalContent.style.top = `${e.clientY - offsetY}px`;
+            }
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+            modalContent.style.cursor = "default";
+        });
+
+        // Runaway button handler
         const runawayButton = document.querySelector('.running-button');
         const container = document.querySelector('.button-container');
 
@@ -112,6 +215,31 @@
             runawayButton.style.left = `${newLeft}px`;
             runawayButton.style.top = `${newTop}px`;
         });
+        
+        // Valentines Download Button Handler
+        document.addEventListener("DOMContentLoaded", function () {
+        // Select the modal and the button that opens it
+        const openModalButton = document.getElementById("openModalButton");
+        const modal = document.getElementById("pdfModal");
+        const closeModalButton = modal.querySelector(".close");
+
+        // Open the modal when the button is clicked
+        openModalButton.addEventListener("click", function () {
+            modal.style.display = "block";
+        });
+
+        // Close the modal when the close button (×) is clicked
+        closeModalButton.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+
+        // Close the modal when clicking outside of it
+        window.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
     </script>
 </body>
 </html>
